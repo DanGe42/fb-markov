@@ -14,10 +14,10 @@ import requests
 Post = namedtuple('Post', ['message', 'comments'])
 
 
-def read_all_messages(feed):
+def _read_all_messages(feed):
     posts = []
-    for post_object in feed['data'].itervalues():
-        message = post_object['message']
+    for post_object in feed['data']:
+        message = post_object.get('message')
 
         comments = None
         if post_object.get('comments'):
@@ -46,7 +46,7 @@ def _crawl_feed_from(feed, access_token, page_limit=20, throttle=1):
     posts = []
     for _ in xrange(page_limit):
         feed = _next_feed_page(feed, access_token)
-        posts.extend(read_all_messages(feed))
+        posts.extend(_read_all_messages(feed))
         time.sleep(throttle)
 
     return posts
@@ -54,7 +54,7 @@ def _crawl_feed_from(feed, access_token, page_limit=20, throttle=1):
 
 def crawl_feed(graph, object_id, fields=None, item_limit=50, page_limit=21, throttle=1):
     feed = fetch_feed(graph, object_id, fields=fields, limit=item_limit)
-    posts = read_all_messages(feed)
+    posts = _read_all_messages(feed)
 
     if page_limit and page_limit > 1:
         time.sleep(throttle)
