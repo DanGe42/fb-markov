@@ -7,6 +7,8 @@ from __future__ import (
 from collections import defaultdict
 import random
 
+import nltk
+
 
 class _CountDict(defaultdict):
 
@@ -26,7 +28,7 @@ class CondFreqDist(defaultdict):
 
     def train(self, source):
         prev_word = _BEGIN
-        for word in source:
+        for word in nltk.word_tokenize(source):
             word = word.lower()
             self[prev_word][word] += 1
             self[prev_word].total += 1
