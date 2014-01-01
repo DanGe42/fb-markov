@@ -17,14 +17,15 @@ class _CountDict(defaultdict):
         self.total = 0
 
 
+# Sentinel objects for denoting text start and end
 _BEGIN = object()
 _END = None
 
 
-class CondFreqDist(defaultdict):
+class ConditionalFreqDist(defaultdict):
 
     def __init__(self):
-        super(CondFreqDist, self).__init__(_CountDict)
+        super(ConditionalFreqDist, self).__init__(_CountDict)
 
     def train(self, source):
         prev_word = _BEGIN
